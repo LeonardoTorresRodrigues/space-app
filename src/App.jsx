@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 import styled from "styled-components"
 import EstilosGlobais from "./components/EstilosGlobais"
 import Cabecalho from "./components/Cabecalho"
@@ -37,6 +37,21 @@ const App = () => {
   const [fotosDaGaleria, setFotosDaGaleria] = useState(fotos);
   const [fotoSelecionada, setFotoSelecionada] = useState(null);
 
+  const aoAlternarFavorito = (foto) => {
+    if (foto.id === fotoSelecionada?.id) {
+      setFotoSelecionada({
+        ...fotoSelecionada,
+        favorita: !fotoSelecionada.favorita
+      })
+    }
+    setFotosDaGaleria(fotosDaGaleria.map(fotoDaGaleria => {
+      return {
+        ...fotoDaGaleria,
+        favorita: fotoDaGaleria.id === foto.id ? !foto.favorita : fotoDaGaleria.favorita
+      }
+    }))
+  }
+
   return (
     <FundoGradiente>
       <EstilosGlobais />
@@ -51,6 +66,7 @@ const App = () => {
             />
             <Galeria 
               aoFotoSelecionada={foto => setFotoSelecionada(foto)}
+              aoAlternarFavorito={aoAlternarFavorito}
               fotos={fotosDaGaleria}
             />
           </ConteudoGaleria>
@@ -59,6 +75,7 @@ const App = () => {
       <ModalZoom 
         foto={fotoSelecionada}
         aoFechar={() => setFotoSelecionada(null)}
+        aoAlternarFavorito={aoAlternarFavorito}
       />
     </FundoGradiente>
   )
